@@ -1,5 +1,6 @@
 export const NOTES_BUCKET = 'notes';
 export const QUESTION_BANKS_BUCKET = 'question-banks';
+export const QUESTION_IMAGES_BUCKET = 'question-images';
 
 const buildStorageMarkers = (bucket: string) => [
   `/object/public/${bucket}/`,
@@ -17,6 +18,9 @@ export const buildNotesStoragePath = (subject: string, fileName: string) => {
 
 export const buildQuestionBankStoragePath = (subject: string, fileName: string) =>
   buildNotesStoragePath(subject, fileName);
+
+export const buildQuestionImageStoragePath = (fileName: string) =>
+  `questions/${Date.now()}_${sanitizeFileName(fileName)}`;
 
 const extractStoragePath = (bucket: string, storedValue: string) => {
   const trimmedValue = storedValue.trim();
@@ -49,3 +53,6 @@ export const extractNotesStoragePath = (storedValue: string) =>
 
 export const extractQuestionBankStoragePath = (storedValue: string) =>
   extractStoragePath(QUESTION_BANKS_BUCKET, storedValue);
+
+export const extractQuestionImageStoragePath = (storedValue: string) =>
+  extractStoragePath(QUESTION_IMAGES_BUCKET, storedValue);

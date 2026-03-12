@@ -6,9 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Plus, Trash2, Save } from 'lucide-react';
+import { Plus, Trash2, Save, ImagePlus, Loader2, X } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 import { SUBJECTS } from '@/lib/subjects';
+import { buildQuestionImageStoragePath, QUESTION_IMAGES_BUCKET } from '@/lib/storage';
 
 type Test = Database['public']['Tables']['tests']['Row'];
 
@@ -19,15 +20,17 @@ interface QuestionForm {
   option_c: string;
   option_d: string;
   correct_answer: string;
+  image_url: string;
 }
 
-const emptyQ: QuestionForm = { question_text: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_answer: '' };
+const emptyQ: QuestionForm = { question_text: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_answer: '', image_url: '' };
 
 const AdminTests = () => {
   const [tests, setTests] = useState<Test[]>([]);
   const [form, setForm] = useState({ title: '', subject: '', studentClass: '', duration: '30' });
   const [questions, setQuestions] = useState<QuestionForm[]>([{ ...emptyQ }]);
   const [saving, setSaving] = useState(false);
+  const [uploadingImageIndex, setUploadingImageIndex] = useState<number | null>(null);
 
   const loadTests = async () => {
     const { data } = await supabase.from('tests').select('*').order('created_at', { ascending: false });
@@ -40,6 +43,31 @@ const AdminTests = () => {
   const removeQuestion = (i: number) => setQuestions(prev => prev.filter((_, idx) => idx !== i));
   const updateQuestion = (i: number, field: keyof QuestionForm, value: string) => {
     setQuestions(prev => prev.map((q, idx) => idx === i ? { ...q, [field]: value } : q));
+  };
+
+  const uploadQuestionImage = async (i: number, file: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please choose an image file');
+      return;
+    }
+
+    setUploadingImageIndex(i);
+    const storagePath = buildQuestionImageStoragePath(file.name);
+    const { error: uploadError } = await supabase.storage.from(QUESTION_IMAGES_BUCKET).upload(storagePath, file, {
+      upsert: false,
+    });
+
+    if (uploadError) {
+      toast.error('Image upload failed: ' + uploadError.message);
+      setUploadingImageIndex(null);
+      return;
+    }
+
+    const { data } = supabase.storage.from(QUESTION_IMAGES_BUCKET).getPublicUrl(storagePath);
+    updateQuestion(i, 'image_url', data.publicUrl);
+    toast.success('Question image uploaded');
+    setUploadingImageIndex(null);
   };
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -63,7 +91,16 @@ const AdminTests = () => {
 
     if (error || !test) { toast.error('Failed to create test'); setSaving(false); return; }
 
-    const qs = questions.map(q => ({ ...q, test_id: test.id }));
+    const qs = questions.map(q => ({
+      question_text: q.question_text,
+      option_a: q.option_a,
+      option_b: q.option_b,
+      option_c: q.option_c,
+      option_d: q.option_d,
+      correct_answer: q.correct_answer,
+      image_url: q.image_url || null,
+      test_id: test.id,
+    }));
     const { error: qError } = await supabase.from('questions').insert(qs);
     if (qError) { toast.error('Failed to add questions'); }
     else { toast.success('Test created!'); setForm({ title: '', subject: '', studentClass: '', duration: '30' }); setQuestions([{ ...emptyQ }]); loadTests(); }
@@ -132,6 +169,33 @@ const AdminTests = () => {
                   )}
                 </div>
                 <Textarea placeholder="Question text" value={q.question_text} onChange={e => updateQuestion(i, 'question_text', e.target.value)} />
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Question Image</Label>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <label className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm hover:bg-accent">
+                      {uploadingImageIndex === i ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+                      <span>{uploadingImageIndex === i ? 'Uploading...' : 'Upload Image'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploadingImageIndex === i}
+                        onChange={e => {
+                          void uploadQuestionImage(i, e.target.files?.[0] || null);
+                          e.currentTarget.value = '';
+                        }}
+                      />
+                    </label>
+                    {q.image_url && (
+                      <Button type="button" variant="outline" size="sm" className="w-fit rounded-lg" onClick={() => updateQuestion(i, 'image_url', '')}>
+                        <X size={14} className="mr-1" /> Remove Image
+                      </Button>
+                    )}
+                  </div>
+                  {q.image_url && (
+                    <img src={q.image_url} alt={`Question ${i + 1}`} className="max-h-48 rounded-lg border border-border object-contain bg-background p-2" />
+                  )}
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   <Input placeholder="Option A" value={q.option_a} onChange={e => updateQuestion(i, 'option_a', e.target.value)} />
                   <Input placeholder="Option B" value={q.option_b} onChange={e => updateQuestion(i, 'option_b', e.target.value)} />
