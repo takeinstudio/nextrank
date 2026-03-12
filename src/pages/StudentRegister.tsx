@@ -24,8 +24,11 @@ const StudentRegister = () => {
       options: { emailRedirectTo: undefined, data: { phone: form.phone } },
     });
     if (error) {
-      if (error.message.toLowerCase().includes('rate limit') || error.message.toLowerCase().includes('email')) {
-        toast.error('Too many registrations. Please try again after a few minutes, or contact admin.');
+      const msg = error.message.toLowerCase();
+      if (msg.includes('rate limit') || msg.includes('over_email_send_rate_limit')) {
+        toast.error('Too many registrations. Please try again after a few minutes.');
+      } else if (msg.includes('already registered') || msg.includes('already been registered') || msg.includes('user already')) {
+        toast.error('This phone number is already registered. Please login instead.');
       } else {
         toast.error(error.message);
       }

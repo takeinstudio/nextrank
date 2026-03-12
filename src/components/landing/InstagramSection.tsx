@@ -1,5 +1,6 @@
+﻿import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, ExternalLink } from 'lucide-react';
+import { Instagram, ExternalLink, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const reels = [
@@ -8,6 +9,13 @@ const reels = [
   'DVvrSOuj1bm',
   'DVsUUg3ieD6',
 ];
+
+const reelStyle: React.CSSProperties = {
+  aspectRatio: (9 / 16).toString(),
+  backgroundImage: 'url(/ig.png)',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+};
 
 const InstagramSection = () => (
   <section className="py-16 md:py-24 px-4 bg-card">
@@ -19,25 +27,27 @@ const InstagramSection = () => (
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {reels.map((id, i) => (
-          <motion.div
+          <motion.a
             key={id}
+            href={"https://www.instagram.com/reel/" + id + "/"}
+            target="_blank"
+            rel="noopener noreferrer"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="rounded-xl overflow-hidden"
-            style={{ aspectRatio: '9/16' }}
+            className="group rounded-xl overflow-hidden relative flex flex-col items-center justify-center hover-lift cursor-pointer"
+            style={reelStyle}
           >
-            <iframe
-              src={`https://www.instagram.com/reel/${id}/embed/`}
-              title={`NXT Rank reel ${i + 1}`}
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
-              allowFullScreen
-              scrolling="no"
-              frameBorder="0"
-              className="w-full h-full"
-            />
-          </motion.div>
+            <div className="absolute inset-0 backdrop-blur-sm bg-black/30 group-hover:bg-black/20 transition-colors" />
+            <div className="relative z-10 flex flex-col items-center gap-3 text-white p-4 text-center">
+              <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Play size={22} className="text-white fill-white ml-1" />
+              </div>
+              <Instagram size={20} className="text-white/80" />
+              <span className="text-xs font-medium text-white/90">Watch Reel {i + 1}</span>
+            </div>
+          </motion.a>
         ))}
       </div>
 

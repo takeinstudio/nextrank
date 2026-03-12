@@ -12,6 +12,10 @@ const LoginPage = () => {
     navigate('/admin-login', { replace: true });
     return null;
   }
+  if (role === 'student') {
+    navigate('/student-login', { replace: true });
+    return null;
+  }
 
   return (
     <div className="min-h-screen gradient-bg flex items-center justify-center px-4 py-8">

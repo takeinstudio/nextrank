@@ -71,10 +71,10 @@ const HeroSection = () => {
           transition={{ delay: 0.7 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Button size="lg" className="gradient-primary text-primary-foreground hover:opacity-90 text-base px-8 py-6 rounded-xl glow-shadow" onClick={() => navigate('/login?role=student')}>
+          <Button size="lg" className="gradient-primary text-primary-foreground hover:opacity-90 text-base px-8 py-6 rounded-xl glow-shadow" onClick={() => navigate('/student-login')}>
             Continue as Student
           </Button>
-          <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-primary/5 text-base px-8 py-6 rounded-xl" onClick={() => navigate('/login?role=admin')}>
+          <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-primary/5 text-base px-8 py-6 rounded-xl" onClick={() => navigate('/admin-login')}>
             Continue as Admin
           </Button>
         </motion.div>
