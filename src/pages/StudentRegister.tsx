@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { hashPassword, setStudentSession } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,41 +17,41 @@ const StudentRegister = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const email = `${form.phone}@nxtrank.com`;
-    
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password: form.password,
-      options: { emailRedirectTo: undefined, data: { phone: form.phone } },
-    });
-    if (error) {
-      const msg = error.message.toLowerCase();
-      if (msg.includes('rate limit') || msg.includes('over_email_send_rate_limit')) {
-        toast.error('Too many registrations. Please try again after a few minutes.');
-      } else if (msg.includes('already registered') || msg.includes('already been registered') || msg.includes('user already')) {
-        toast.error('This phone number is already registered. Please login instead.');
-      } else {
-        toast.error(error.message);
-      }
+
+    // Check if phone is already registered
+    const { data: existing } = await supabase
+      .from('students')
+      .select('id')
+      .eq('phone', form.phone)
+      .maybeSingle();
+    if (existing) {
+      toast.error('This phone number is already registered. Please login instead.');
       setLoading(false);
       return;
     }
 
-    if (data.user) {
-      const { error: profileError } = await supabase.from('students').insert({
-        id: data.user.id,
+    const password_hash = await hashPassword(form.password);
+    const { data, error } = await supabase
+      .from('students')
+      .insert({
         name: form.name,
         phone: form.phone,
         class: parseInt(form.studentClass),
         parent_contact: form.parentContact,
-      });
-      if (profileError) {
-        toast.error('Registration failed: ' + profileError.message);
-      } else {
-        toast.success('Registration successful!');
-        navigate('/student');
-      }
+        password_hash,
+      })
+      .select('id, name, phone, class, parent_contact')
+      .single();
+
+    if (error) {
+      toast.error('Registration failed: ' + error.message);
+      setLoading(false);
+      return;
     }
+
+    setStudentSession({ id: data.id, name: data.name, phone: data.phone, class: data.class, parent_contact: form.parentContact });
+    toast.success('Registration successful!');
+    navigate('/student');
     setLoading(false);
   };
 

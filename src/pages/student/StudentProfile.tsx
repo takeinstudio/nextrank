@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { getStudentSession, clearStudentSession } from '@/lib/auth';
 import { User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -10,16 +11,17 @@ const StudentProfile = () => {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const session = getStudentSession();
       if (!session) return;
-      const { data } = await supabase.from('students').select('*').eq('id', session.user.id).maybeSingle();
-      setStudent(data);
+      // Fetch full record from DB to get parent_contact and latest data
+      const { data } = await supabase.from('students').select('*').eq('id', session.id).maybeSingle();
+      setStudent(data || session);
     };
     load();
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleLogout = () => {
+    clearStudentSession();
     navigate('/');
   };
 

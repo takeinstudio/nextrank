@@ -7,6 +7,7 @@ import { BookOpenText, Download } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 import { SUBJECT_FILTERS, type SubjectFilter } from '@/lib/subjects';
 import { extractQuestionBankStoragePath, QUESTION_BANKS_BUCKET } from '@/lib/storage';
+import { toast } from 'sonner';
 
 type QuestionBank = Database['public']['Tables']['question_banks']['Row'];
 
@@ -22,16 +23,26 @@ const StudentQuestionBanks = () => {
     load();
   }, []);
 
-  const downloadFile = async (filePath: string) => {
+  const downloadFile = async (filePath: string, title: string) => {
     const normalizedPath = extractQuestionBankStoragePath(filePath);
-    const { data, error } = await supabase.storage.from(QUESTION_BANKS_BUCKET).createSignedUrl(normalizedPath, 3600);
-
-    if (error) {
-      return;
-    }
-
-    if (data?.signedUrl) {
-      window.open(data.signedUrl, '_blank');
+    const { data } = supabase.storage.from(QUESTION_BANKS_BUCKET).getPublicUrl(normalizedPath);
+    try {
+      const res = await fetch(data.publicUrl);
+      if (!res.ok) {
+        toast.error('File not found. Please ask admin to re-upload this question bank.');
+        return;
+      }
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `${title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast.error('Download failed. Please try again.');
     }
   };
 
@@ -69,7 +80,7 @@ const StudentQuestionBanks = () => {
                       <p className="text-xs text-muted-foreground">Class {questionBank.class} • {questionBank.subject}</p>
                     </div>
                   </div>
-                  <Button size="sm" variant="outline" className="rounded-lg" onClick={() => downloadFile(questionBank.file_path)}>
+                  <Button size="sm" variant="outline" className="rounded-lg" onClick={() => downloadFile(questionBank.file_path, questionBank.title)}>
                     <Download size={14} />
                   </Button>
                 </motion.div>

@@ -80,6 +80,26 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
+      {/* Animated scroll-down arrow */}
+      <motion.button
+        onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-primary/60 hover:text-primary transition-colors z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        aria-label="Scroll down"
+      >
+        <span className="text-xs font-medium tracking-widest uppercase">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 5v14M5 12l7 7 7-7" />
+          </svg>
+        </motion.div>
+      </motion.button>
+
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 100" fill="none" className="w-full">
           <path d="M0,60 C360,100 720,0 1080,60 C1260,80 1380,40 1440,60 L1440,100 L0,100 Z" fill="hsl(0 0% 100% / 0.5)" />

@@ -15,6 +15,7 @@ import StudentQuestionBanks from "./pages/student/StudentQuestionBanks";
 import StudentResources from "./pages/student/StudentResources";
 import StudentTests from "./pages/student/StudentTests";
 import StudentProfile from "./pages/student/StudentProfile";
+import StudentResults from "./pages/student/StudentResults";
 import StudentFaculty from "./pages/student/StudentFaculty";
 import StudentYouTube from "./pages/student/StudentYouTube";
 import StudentInstagram from "./pages/student/StudentInstagram";
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="resources" element={<StudentResources />} />
             <Route path="question-banks" element={<StudentQuestionBanks />} />
             <Route path="tests" element={<StudentTests />} />
+            <Route path="results" element={<StudentResults />} />
             <Route path="youtube" element={<StudentYouTube />} />
             <Route path="instagram" element={<StudentInstagram />} />
             <Route path="profile" element={<StudentProfile />} />

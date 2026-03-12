@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { hashPassword, setStudentSession } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,14 +17,24 @@ const StudentLogin = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const email = `${phone}@nxtrank.com`;
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
+
+    const password_hash = await hashPassword(password);
+    const { data, error } = await supabase
+      .from('students')
+      .select('id, name, phone, class, parent_contact')
+      .eq('phone', phone)
+      .eq('password_hash', password_hash)
+      .maybeSingle();
+
+    if (error || !data) {
       toast.error('Invalid phone number or password');
-    } else {
-      toast.success('Welcome back!');
-      navigate('/student');
+      setLoading(false);
+      return;
     }
+
+    setStudentSession({ id: data.id, name: data.name, phone: data.phone, class: data.class, parent_contact: data.parent_contact ?? '' });
+    toast.success('Welcome back!');
+    navigate('/student');
     setLoading(false);
   };
 

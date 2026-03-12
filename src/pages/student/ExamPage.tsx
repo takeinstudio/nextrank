@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { getStudentSession } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
@@ -32,11 +33,10 @@ const ExamPage = () => {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const session = getStudentSession();
       if (!session) { navigate('/student-login'); return; }
-      setStudentId(session.user.id);
-      const { data: s } = await supabase.from('students').select('name').eq('id', session.user.id).maybeSingle();
-      setStudentName(s?.name || 'Student');
+      setStudentId(session.id);
+      setStudentName(session.name || 'Student');
       const { data: t } = await supabase.from('tests').select('*').eq('id', testId).maybeSingle();
       if (!t) { navigate('/student/tests'); return; }
       setTest(t);
@@ -67,7 +67,7 @@ const ExamPage = () => {
     const attemptNumber = (count || 0) + 1;
 
     // Save attempt
-    const { data: attempt } = await supabase.from('test_attempts').insert({
+    const { data: attempt, error: attemptError } = await supabase.from('test_attempts').insert({
       student_id: studentId,
       test_id: testId,
       score,
@@ -76,6 +76,13 @@ const ExamPage = () => {
       wrong_answers: wrong,
       attempt_number: attemptNumber,
     }).select().single();
+
+    if (attemptError) {
+      console.error('Attempt save failed:', attemptError.message);
+      toast.error('Could not save result: ' + attemptError.message);
+      setResult({ score, total, correct, wrong, attemptNumber });
+      return;
+    }
 
     // Save individual answers
     if (attempt) {

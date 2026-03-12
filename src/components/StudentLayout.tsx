@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
-import { Home, Users, FileText, ClipboardList, Youtube, Instagram, User, LogOut, BookOpenText } from 'lucide-react';
+import { getStudentSession, clearStudentSession } from '@/lib/auth';
+import { Home, Users, FileText, ClipboardList, Youtube, Instagram, User, LogOut, BookOpenText, Trophy } from 'lucide-react';
 import logo from '@/assets/logo.jpeg';
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { path: '/student/resources', icon: FileText, label: 'Resources' },
   { path: '/student/question-banks', icon: BookOpenText, label: 'Q Banks' },
   { path: '/student/tests', icon: ClipboardList, label: 'Tests' },
+  { path: '/student/results', icon: Trophy, label: 'Results' },
   { path: '/student/youtube', icon: Youtube, label: 'YouTube' },
   { path: '/student/instagram', icon: Instagram, label: 'Instagram' },
   { path: '/student/profile', icon: User, label: 'Profile' },
@@ -21,20 +22,19 @@ const StudentLayout = () => {
   const [student, setStudent] = useState<any>(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    const checkAuth = () => {
+      const session = getStudentSession();
       if (!session) {
         navigate('/student-login', { replace: true });
         return;
       }
-      const { data } = await supabase.from('students').select('*').eq('id', session.user.id).maybeSingle();
-      setStudent(data);
+      setStudent(session);
     };
     checkAuth();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleLogout = () => {
+    clearStudentSession();
     navigate('/');
   };
 

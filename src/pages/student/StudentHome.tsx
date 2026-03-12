@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { getStudentSession } from '@/lib/auth';
 import { BookOpen, ClipboardList, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -9,13 +10,12 @@ const StudentHome = () => {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const session = getStudentSession();
       if (!session) return;
-      const { data: s } = await supabase.from('students').select('*').eq('id', session.user.id).maybeSingle();
-      setStudent(s);
+      setStudent(session);
       const { count: tc } = await supabase.from('tests').select('*', { count: 'exact', head: true });
       const { count: rc } = await supabase.from('resources').select('*', { count: 'exact', head: true });
-      const { count: ac } = await supabase.from('test_attempts').select('*', { count: 'exact', head: true }).eq('student_id', session.user.id);
+      const { count: ac } = await supabase.from('test_attempts').select('*', { count: 'exact', head: true }).eq('student_id', session.id);
       setStats({ tests: tc || 0, resources: rc || 0, attempts: ac || 0 });
     };
     load();

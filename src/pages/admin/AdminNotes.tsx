@@ -80,18 +80,27 @@ const AdminNotes = () => {
     const normalizedPath = extractNotesStoragePath(filePath);
     setDeletingId(id);
 
+    // Storage delete — ignore "not found" (file may already be gone)
     const { error: storageError } = await supabase.storage.from(NOTES_BUCKET).remove([normalizedPath]);
-
-    if (storageError) {
+    if (storageError && !storageError.message.toLowerCase().includes('not found')) {
       toast.error('PDF delete failed: ' + storageError.message);
       setDeletingId(null);
       return;
     }
 
-    const { error: dbError } = await supabase.from('resources').delete().eq('id', id);
+    const { error: dbError, count } = await supabase
+      .from('resources')
+      .delete({ count: 'exact' })
+      .eq('id', id);
 
     if (dbError) {
       toast.error('Record delete failed: ' + dbError.message);
+      setDeletingId(null);
+      return;
+    }
+
+    if (count === 0) {
+      toast.error('Delete failed: no record removed. Please run the latest SQL migration in Supabase.');
       setDeletingId(null);
       return;
     }

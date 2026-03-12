@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Database } from '@/integrations/supabase/types';
 import { SUBJECT_FILTERS, type SubjectFilter } from '@/lib/subjects';
 import { extractNotesStoragePath, NOTES_BUCKET } from '@/lib/storage';
+import { toast } from 'sonner';
 
 type Resource = Database['public']['Tables']['resources']['Row'];
 
@@ -21,16 +22,26 @@ const StudentResources = () => {
     load();
   }, []);
 
-  const downloadFile = async (filePath: string) => {
+  const downloadFile = async (filePath: string, title: string) => {
     const normalizedPath = extractNotesStoragePath(filePath);
-    const { data, error } = await supabase.storage.from(NOTES_BUCKET).createSignedUrl(normalizedPath, 3600);
-
-    if (error) {
-      return;
-    }
-
-    if (data?.signedUrl) {
-      window.open(data.signedUrl, '_blank');
+    const { data } = supabase.storage.from(NOTES_BUCKET).getPublicUrl(normalizedPath);
+    try {
+      const res = await fetch(data.publicUrl);
+      if (!res.ok) {
+        toast.error('File not found. Please ask admin to re-upload this resource.');
+        return;
+      }
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `${title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast.error('Download failed. Please try again.');
     }
   };
 
@@ -63,7 +74,7 @@ const StudentResources = () => {
                       <p className="text-xs text-muted-foreground">Class {resource.class} • {resource.subject}</p>
                     </div>
                   </div>
-                  <Button size="sm" variant="outline" className="rounded-lg" onClick={() => downloadFile(resource.file_path)}>
+                  <Button size="sm" variant="outline" className="rounded-lg" onClick={() => downloadFile(resource.file_path, resource.title)}>
                     <Download size={14} />
                   </Button>
                 </motion.div>
