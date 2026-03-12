@@ -16,7 +16,7 @@ const StudentLogin = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const email = `${phone}@nxtrank.student`;
+    const email = `${phone}@nxtrank.com`;
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       toast.error('Invalid phone number or password');

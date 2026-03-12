@@ -16,7 +16,7 @@ const StudentRegister = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const email = `${form.phone}@nxtrank.student`;
+    const email = `${form.phone}@nxtrank.com`;
     
     const { data, error } = await supabase.auth.signUp({ email, password: form.password });
     if (error) {
