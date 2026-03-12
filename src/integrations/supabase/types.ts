@@ -124,6 +124,33 @@ export type Database = {
           },
         ]
       }
+      question_banks: {
+        Row: {
+          class: number
+          created_at: string
+          file_path: string
+          id: string
+          subject: string
+          title: string
+        }
+        Insert: {
+          class: number
+          created_at?: string
+          file_path: string
+          id?: string
+          subject: string
+          title: string
+        }
+        Update: {
+          class?: number
+          created_at?: string
+          file_path?: string
+          id?: string
+          subject?: string
+          title?: string
+        }
+        Relationships: []
+      }
       resources: {
         Row: {
           class: number
@@ -175,6 +202,24 @@ export type Database = {
           name?: string
           parent_contact?: string
           phone?: string
+        }
+        Relationships: []
+      }
+      subject_catalog: {
+        Row: {
+          created_at: string
+          display_order: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          name?: string
         }
         Relationships: []
       }

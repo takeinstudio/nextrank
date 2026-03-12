@@ -11,6 +11,7 @@ import StudentRegister from "./pages/StudentRegister";
 import AdminLogin from "./pages/AdminLogin";
 import StudentLayout from "./components/StudentLayout";
 import StudentHome from "./pages/student/StudentHome";
+import StudentQuestionBanks from "./pages/student/StudentQuestionBanks";
 import StudentResources from "./pages/student/StudentResources";
 import StudentTests from "./pages/student/StudentTests";
 import StudentProfile from "./pages/student/StudentProfile";
@@ -20,6 +21,7 @@ import StudentInstagram from "./pages/student/StudentInstagram";
 import ExamPage from "./pages/student/ExamPage";
 import AdminLayout from "./components/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminQuestionBanks from "./pages/admin/AdminQuestionBanks";
 import AdminStudents from "./pages/admin/AdminStudents";
 import AdminNotes from "./pages/admin/AdminNotes";
 import AdminTests from "./pages/admin/AdminTests";
@@ -45,6 +47,7 @@ const App = () => (
             <Route index element={<StudentHome />} />
             <Route path="faculty" element={<StudentFaculty />} />
             <Route path="resources" element={<StudentResources />} />
+            <Route path="question-banks" element={<StudentQuestionBanks />} />
             <Route path="tests" element={<StudentTests />} />
             <Route path="youtube" element={<StudentYouTube />} />
             <Route path="instagram" element={<StudentInstagram />} />
@@ -54,6 +57,7 @@ const App = () => (
             <Route index element={<AdminHome />} />
             <Route path="students" element={<AdminStudents />} />
             <Route path="notes" element={<AdminNotes />} />
+            <Route path="question-banks" element={<AdminQuestionBanks />} />
             <Route path="tests" element={<AdminTests />} />
             <Route path="results" element={<AdminResults />} />
             <Route path="settings" element={<AdminSettings />} />

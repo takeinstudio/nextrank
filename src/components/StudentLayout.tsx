@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
-import { Home, Users, FileText, ClipboardList, Youtube, Instagram, User, LogOut, BookOpen } from 'lucide-react';
+import { Home, Users, FileText, ClipboardList, Youtube, Instagram, User, LogOut, BookOpenText } from 'lucide-react';
 import logo from '@/assets/logo.jpeg';
 
 const navItems = [
   { path: '/student', icon: Home, label: 'Home' },
   { path: '/student/faculty', icon: Users, label: 'Faculty' },
   { path: '/student/resources', icon: FileText, label: 'Resources' },
+  { path: '/student/question-banks', icon: BookOpenText, label: 'Q Banks' },
   { path: '/student/tests', icon: ClipboardList, label: 'Tests' },
   { path: '/student/youtube', icon: Youtube, label: 'YouTube' },
   { path: '/student/instagram', icon: Instagram, label: 'Instagram' },
@@ -36,9 +37,6 @@ const StudentLayout = () => {
     await supabase.auth.signOut();
     navigate('/');
   };
-
-  // Mobile bottom nav items (limited)
-  const mobileNav = navItems.slice(0, 5);
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,12 +73,12 @@ const StudentLayout = () => {
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-card-solid border-t border-border z-40 flex justify-around py-2">
-        {mobileNav.map(item => (
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-card-solid border-t border-border z-40 flex gap-1 overflow-x-auto px-2 py-2">
+        {navItems.map(item => (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className={`flex flex-col items-center gap-0.5 px-2 py-1 text-xs ${
+            className={`flex min-w-[72px] flex-col items-center gap-0.5 px-2 py-1 text-[11px] ${
               location.pathname === item.path ? 'text-primary' : 'text-muted-foreground'
             }`}
           >

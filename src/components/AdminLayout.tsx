@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, FileText, ClipboardList, BarChart3, Settings, LogOut } from 'lucide-react';
+import { Home, Users, FileText, ClipboardList, BarChart3, Settings, LogOut, BookOpenText } from 'lucide-react';
 import logo from '@/assets/logo.jpeg';
 
 const navItems = [
   { path: '/admin', icon: Home, label: 'Dashboard' },
   { path: '/admin/students', icon: Users, label: 'Students' },
   { path: '/admin/notes', icon: FileText, label: 'Upload Notes' },
+  { path: '/admin/question-banks', icon: BookOpenText, label: 'Question Banks' },
   { path: '/admin/tests', icon: ClipboardList, label: 'Mock Tests' },
   { path: '/admin/results', icon: BarChart3, label: 'Results' },
   { path: '/admin/settings', icon: Settings, label: 'Settings' },
@@ -72,12 +73,12 @@ const AdminLayout = () => {
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-card-solid border-t border-border z-40 flex justify-around py-2">
-        {navItems.slice(0, 5).map(item => (
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass-card-solid border-t border-border z-40 flex gap-1 overflow-x-auto px-2 py-2">
+        {navItems.map(item => (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className={`flex flex-col items-center gap-0.5 px-2 py-1 text-xs ${
+            className={`flex min-w-[72px] flex-col items-center gap-0.5 px-2 py-1 text-[11px] ${
               location.pathname === item.path ? 'text-primary' : 'text-muted-foreground'
             }`}
           >

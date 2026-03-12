@@ -18,7 +18,7 @@ const FacultySection = () => (
         </div>
         <h3 className="text-xl font-bold mb-1">Pruthwiraj Sir</h3>
         <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-4">
-          <span className="flex items-center gap-1"><BookOpen size={14} /> Physics, Chemistry, Maths</span>
+          <span className="flex items-center gap-1"><BookOpen size={14} /> Physics, Chemistry, Mathematics and more</span>
           <span className="flex items-center gap-1"><Award size={14} /> CHSE Expert</span>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">

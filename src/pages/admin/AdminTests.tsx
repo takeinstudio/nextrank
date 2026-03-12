@@ -7,6 +7,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Plus, Trash2, Save } from 'lucide-react';
+import type { Database } from '@/integrations/supabase/types';
+import { SUBJECTS } from '@/lib/subjects';
+
+type Test = Database['public']['Tables']['tests']['Row'];
 
 interface QuestionForm {
   question_text: string;
@@ -20,7 +24,7 @@ interface QuestionForm {
 const emptyQ: QuestionForm = { question_text: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_answer: '' };
 
 const AdminTests = () => {
-  const [tests, setTests] = useState<any[]>([]);
+  const [tests, setTests] = useState<Test[]>([]);
   const [form, setForm] = useState({ title: '', subject: '', studentClass: '', duration: '30' });
   const [questions, setQuestions] = useState<QuestionForm[]>([{ ...emptyQ }]);
   const [saving, setSaving] = useState(false);
@@ -40,6 +44,10 @@ const AdminTests = () => {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.title.trim() || !form.subject || !form.studentClass) {
+      toast.error('Select subject, class, and enter a test title');
+      return;
+    }
     if (questions.some(q => !q.question_text || !q.correct_answer)) {
       toast.error('Fill all questions and select correct answers');
       return;
@@ -47,7 +55,7 @@ const AdminTests = () => {
     setSaving(true);
 
     const { data: test, error } = await supabase.from('tests').insert({
-      title: form.title,
+      title: form.title.trim(),
       subject: form.subject,
       class: parseInt(form.studentClass),
       duration: parseInt(form.duration),
@@ -76,16 +84,16 @@ const AdminTests = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label>Test Title</Label>
-            <Input placeholder="e.g. Physics Mock Test 1" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required className="mt-1" />
+            <Input placeholder="e.g. Biology Mock Test 1" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required className="mt-1" />
           </div>
           <div>
             <Label>Subject</Label>
             <Select onValueChange={v => setForm(p => ({ ...p, subject: v }))} value={form.subject}>
               <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="Physics">Physics</SelectItem>
-                <SelectItem value="Chemistry">Chemistry</SelectItem>
-                <SelectItem value="Mathematics">Mathematics</SelectItem>
+                {SUBJECTS.map(subject => (
+                  <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

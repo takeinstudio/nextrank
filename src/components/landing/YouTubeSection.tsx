@@ -43,7 +43,7 @@ const YouTubeSection = () => (
           <Youtube className="text-red-500" size={32} />
         </div>
         <h3 className="text-xl font-bold mb-2">NXT Rank on YouTube</h3>
-        <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">Watch our latest physics, chemistry and mathematics lectures completely free in Odia language.</p>
+        <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">Watch our latest subject-wise lectures and revision videos completely free in Odia language.</p>
         <Button asChild className="gradient-primary text-primary-foreground rounded-xl px-6">
           <a href="https://www.youtube.com/@nxt-rank" target="_blank" rel="noopener noreferrer">
             <Youtube size={18} className="mr-2" /> Visit Channel <ExternalLink size={14} className="ml-2" />

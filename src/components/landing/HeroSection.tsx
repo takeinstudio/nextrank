@@ -62,7 +62,7 @@ const HeroSection = () => {
           transition={{ delay: 0.5 }}
           className="text-muted-foreground max-w-2xl mx-auto mb-8 text-sm md:text-base leading-relaxed"
         >
-          Learn Physics, Chemistry, and Mathematics in Odia with structured lectures, revision sessions, and mock tests designed for CHSE exam success.
+          Learn Physics, Chemistry, Mathematics, Biology, Information Technology (Java), Odia, and English with structured lectures, revision sessions, notes, and mock tests designed for CHSE exam success.
         </motion.p>
 
         <motion.div
