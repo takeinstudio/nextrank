@@ -2,6 +2,13 @@ import { motion } from 'framer-motion';
 import { Instagram, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+const reels = [
+  'DVyPftTiZ2l',
+  'DVn43ZGCXgC',
+  'DVvrSOuj1bm',
+  'DVsUUg3ieD6',
+];
+
 const InstagramSection = () => (
   <section className="py-16 md:py-24 px-4 bg-card">
     <div className="container max-w-5xl">
@@ -9,6 +16,31 @@ const InstagramSection = () => (
         <h2 className="text-3xl md:text-4xl font-bold mb-3 gradient-primary-text">Join Our Community</h2>
         <p className="text-muted-foreground">Follow us on Instagram for daily updates</p>
       </motion.div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        {reels.map((id, i) => (
+          <motion.div
+            key={id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="rounded-xl overflow-hidden"
+            style={{ aspectRatio: '9/16' }}
+          >
+            <iframe
+              src={`https://www.instagram.com/reel/${id}/embed/`}
+              title={`NXT Rank reel ${i + 1}`}
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+              allowFullScreen
+              scrolling="no"
+              frameBorder="0"
+              className="w-full h-full"
+            />
+          </motion.div>
+        ))}
+      </div>
+
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card-solid rounded-2xl p-6 md:p-8 text-center">
         <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mx-auto mb-4">
           <Instagram className="text-primary-foreground" size={28} />
