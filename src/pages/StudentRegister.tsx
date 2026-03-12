@@ -18,9 +18,17 @@ const StudentRegister = () => {
     setLoading(true);
     const email = `${form.phone}@nxtrank.com`;
     
-    const { data, error } = await supabase.auth.signUp({ email, password: form.password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: form.password,
+      options: { emailRedirectTo: undefined, data: { phone: form.phone } },
+    });
     if (error) {
-      toast.error(error.message);
+      if (error.message.toLowerCase().includes('rate limit') || error.message.toLowerCase().includes('email')) {
+        toast.error('Too many registrations. Please try again after a few minutes, or contact admin.');
+      } else {
+        toast.error(error.message);
+      }
       setLoading(false);
       return;
     }
