@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 
 const videos = [
   'YANB2qJJ238',
-  'uIcmL4uVtAQ',
-  'wOQKWW4HvKc',
+  'lKl91dr4Sng',
+  '0MpHFnSLLQM',
   'x5aNNszY-g4',
 ];
 

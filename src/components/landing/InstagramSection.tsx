@@ -11,10 +11,11 @@ const reels = [
 ];
 
 const reelStyle: React.CSSProperties = {
-  aspectRatio: (9 / 16).toString(),
+  aspectRatio: '1 / 1',
   backgroundImage: 'url(/ig.png)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
+  boxShadow: '0 24px 60px rgba(15, 23, 42, 0.18)',
 };
 
 const InstagramSection = () => (
@@ -36,16 +37,20 @@ const InstagramSection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="group rounded-xl overflow-hidden relative flex flex-col items-center justify-center hover-lift cursor-pointer"
+            whileHover={{ y: -6, rotateX: 6, rotateY: i % 2 === 0 ? -6 : 6, scale: 1.02 }}
+            className="group relative flex flex-col items-center justify-center overflow-hidden rounded-[1.75rem] border border-white/40 cursor-pointer [transform-style:preserve-3d] [perspective:1200px]"
             style={reelStyle}
           >
-            <div className="absolute inset-0 backdrop-blur-sm bg-black/30 group-hover:bg-black/20 transition-colors" />
-            <div className="relative z-10 flex flex-col items-center gap-3 text-white p-4 text-center">
-              <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Play size={22} className="text-white fill-white ml-1" />
+            {/* dark vignette — strong edges, clear centre */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_15%,rgba(0,0,0,0.30)_50%,rgba(0,0,0,0.72)_100%)]" />
+            {/* bottom fade so text always pops */}
+            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center text-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-white/90 bg-white/25 shadow-[0_4px_24px_rgba(0,0,0,0.55)] backdrop-blur-[2px] transition-transform group-hover:scale-110 group-hover:bg-white/40">
+                <Play size={24} className="fill-white text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] ml-1" />
               </div>
-              <Instagram size={20} className="text-white/80" />
-              <span className="text-xs font-medium text-white/90">Watch Reel {i + 1}</span>
+              <Instagram size={20} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]" />
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">Watch Reel {i + 1}</span>
             </div>
           </motion.a>
         ))}
