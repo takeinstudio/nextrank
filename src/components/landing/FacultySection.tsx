@@ -13,8 +13,8 @@ const FacultySection = () => (
         viewport={{ once: true }}
         className="glass-card-solid rounded-2xl p-8 max-w-lg mx-auto text-center hover-lift"
       >
-        <div className="w-24 h-24 rounded-full gradient-primary flex items-center justify-center mx-auto mb-4 text-primary-foreground text-3xl font-bold">
-          PS
+        <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden">
+          <img src="/faculty.jpeg" alt="Pruthwiraj Sir" className="w-full h-full object-cover" />
         </div>
         <h3 className="text-xl font-bold mb-1">Pruthwiraj Sir</h3>
         <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-4">
