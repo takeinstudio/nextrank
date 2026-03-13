@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, FlaskConical, Calculator, GraduationCap } from 'lucide-react';
+import { BookOpen, FlaskConical, Calculator, GraduationCap, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import logo from '@/assets/logo.jpeg';
@@ -13,6 +13,11 @@ const floatingIcons = [
 
 const HeroSection = () => {
   const navigate = useNavigate();
+
+  const handleScrollDown = () => {
+    const nextSection = document.querySelector('#features');
+    nextSection?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-bg px-4">
@@ -79,6 +84,23 @@ const HeroSection = () => {
           </Button>
         </motion.div>
       </div>
+
+      <motion.button
+        type="button"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: [0, 10, 0] }}
+        transition={{ opacity: { delay: 1 }, y: { delay: 1, duration: 1.8, repeat: Infinity, ease: 'easeInOut' } }}
+        onClick={handleScrollDown}
+        aria-label="Scroll down to explore more"
+        className="group absolute bottom-20 left-[calc(50%-70px)] z-20 flex -translate-x-1/2 flex-col items-center gap-2 rounded-full border border-primary/20 bg-white/75 px-4 py-3 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-x-1/2 hover:scale-105 hover:border-primary/40 hover:bg-white md:bottom-10"
+      >
+        <span className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground transition-colors duration-300 group-hover:text-primary">
+          Scroll Down
+        </span>
+        <span className="flex h-10 w-10 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-md">
+          <ChevronDown size={20} />
+        </span>
+      </motion.button>
 
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 100" fill="none" className="w-full">
