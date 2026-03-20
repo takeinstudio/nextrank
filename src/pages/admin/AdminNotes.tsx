@@ -45,12 +45,16 @@ const AdminNotes = () => {
 
   const visibleResources = selectedSubject === 'All'
     ? resources
-    : resources.filter(resource => resource.subject === selectedSubject);
+    : resources.filter(resource => resource.subject?.trim().toLowerCase() === selectedSubject.toLowerCase());
 
   const subjectGroups = getSubjectGroups(visibleResources);
 
   const loadResources = async () => {
-    const { data } = await supabase.from('resources').select('*').order('created_at', { ascending: false });
+    const { data } = await supabase
+      .from('resources')
+      .select('*')
+      .order('class', { ascending: true })
+      .order('chapter_index', { ascending: true });
     setResources(data || []);
   };
 

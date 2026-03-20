@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { getStudentSession, clearStudentSession } from '@/lib/auth';
-import { Home, Users, FileText, ClipboardList, Youtube, Instagram, User, LogOut, BookOpenText, Trophy } from 'lucide-react';
+import { Home, Users, FileText, ClipboardList, Youtube, Instagram, User, LogOut, BookOpenText, Trophy, BotMessageSquare } from 'lucide-react';
 import logo from '@/assets/logo.jpeg';
 
 const navItems = [
@@ -14,6 +14,7 @@ const navItems = [
   { path: '/student/youtube', icon: Youtube, label: 'YouTube' },
   { path: '/student/instagram', icon: Instagram, label: 'Instagram' },
   { path: '/student/profile', icon: User, label: 'Profile' },
+  { path: '/student/assistant', icon: BotMessageSquare, label: 'AI Tutor' },
 ];
 
 const StudentLayout = () => {

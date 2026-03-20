@@ -46,7 +46,9 @@ const StudentResources = () => {
   };
 
   const filterResources = (subject: SubjectFilter) =>
-    subject === 'All' ? resources : resources.filter(r => r.subject === subject);
+    subject === 'All'
+      ? resources
+      : resources.filter(r => r.subject?.trim().toLowerCase() === subject.toLowerCase());
 
   return (
     <div className="p-4 md:p-8 max-w-4xl">

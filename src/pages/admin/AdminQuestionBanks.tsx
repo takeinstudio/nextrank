@@ -26,7 +26,11 @@ const AdminQuestionBanks = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const loadQuestionBanks = async () => {
-    const { data } = await supabase.from('question_banks').select('*').order('created_at', { ascending: false });
+    const { data } = await supabase
+      .from('question_banks')
+      .select('*')
+      .order('class', { ascending: true })
+      .order('chapter_index', { ascending: true });
     setQuestionBanks(data || []);
   };
 
