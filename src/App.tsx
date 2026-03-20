@@ -20,7 +20,7 @@ import StudentFaculty from "./pages/student/StudentFaculty";
 import StudentYouTube from "./pages/student/StudentYouTube";
 import StudentInstagram from "./pages/student/StudentInstagram";
 import ExamPage from "./pages/student/ExamPage";
-import StudentAI from "./pages/student/StudentAI";
+// ...existing code...
 import AdminLayout from "./components/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminQuestionBanks from "./pages/admin/AdminQuestionBanks";
@@ -55,7 +55,7 @@ const App = () => (
             <Route path="youtube" element={<StudentYouTube />} />
             <Route path="instagram" element={<StudentInstagram />} />
             <Route path="profile" element={<StudentProfile />} />
-            <Route path="assistant" element={<StudentAI />} />
+            // ...existing code...
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHome />} />
