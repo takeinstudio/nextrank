@@ -82,6 +82,14 @@ const HeroSection = () => {
           <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-primary/5 text-base px-8 py-6 rounded-xl" onClick={() => navigate('/admin-login')}>
             Continue as Admin
           </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="border-green-600 text-green-700 hover:bg-green-50 text-base px-8 py-6 rounded-xl"
+            onClick={() => window.open('https://drive.google.com/file/d/1yb1LVqKhnqVdEbsH0wSB-lApPHixU797/view?usp=sharing', '_blank')}
+          >
+            Download APK
+          </Button>
         </motion.div>
       </div>
 

@@ -16,7 +16,7 @@ const FacultySection = () => (
         <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden">
           <img src="/faculty.jpeg" alt="Pruthwiraj Sir" className="w-full h-full object-cover" />
         </div>
-        <h3 className="text-xl font-bold mb-1">Pruthwiraj Sir</h3>
+        <h3 className="text-xl font-bold mb-1">Mr. Pruthwiraj Behera</h3>
         <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-4">
           <span className="flex items-center gap-1"><BookOpen size={14} /> Physics, Chemistry, Mathematics and more</span>
           <span className="flex items-center gap-1"><Award size={14} /> CHSE Expert</span>

@@ -14,7 +14,6 @@ const navItems = [
   { path: '/student/youtube', icon: Youtube, label: 'YouTube' },
   { path: '/student/instagram', icon: Instagram, label: 'Instagram' },
   { path: '/student/profile', icon: User, label: 'Profile' },
-  { path: '/student/assistant', icon: BotMessageSquare, label: 'AI Tutor' },
 ];
 
 const StudentLayout = () => {
