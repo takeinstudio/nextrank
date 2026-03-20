@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import logo from '@/assets/logo.jpeg';
 
-const ADMIN_PASSWORD = 'NextRankPruthiwiraj@07';
+const ADMIN_PASSWORD = 'nxtrnk07';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
