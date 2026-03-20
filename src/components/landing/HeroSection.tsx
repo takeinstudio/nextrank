@@ -33,7 +33,7 @@ const HeroSection = () => {
         </motion.div>
       ))}
 
-      <div className="container max-w-4xl text-center relative z-10 pt-20 pb-16">
+      <div className="container max-w-4xl text-center relative z-10 pt-10 md:pt-20 pb-16">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -74,18 +74,18 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col gap-4 justify-center items-center sm:flex-row sm:items-stretch"
         >
-          <Button size="lg" className="gradient-primary text-primary-foreground hover:opacity-90 text-base px-8 py-6 rounded-xl glow-shadow" onClick={() => navigate('/student-login')}>
+          <Button size="lg" className="gradient-primary text-primary-foreground hover:opacity-90 text-base px-8 py-6 rounded-xl glow-shadow w-full sm:w-auto" onClick={() => navigate('/student-login')}>
             Continue as Student
           </Button>
-          <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-primary/5 text-base px-8 py-6 rounded-xl" onClick={() => navigate('/admin-login')}>
+          <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-primary/5 text-base px-8 py-6 rounded-xl w-full sm:w-auto" onClick={() => navigate('/admin-login')}>
             Continue as Admin
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="border-green-600 text-green-700 hover:bg-green-50 text-base px-8 py-6 rounded-xl"
+            className="border-green-600 text-green-700 hover:bg-green-50 text-base px-8 py-6 rounded-xl w-full sm:w-auto"
             onClick={() => window.open('https://drive.google.com/file/d/1yb1LVqKhnqVdEbsH0wSB-lApPHixU797/view?usp=sharing', '_blank')}
           >
             Download APK
@@ -100,7 +100,7 @@ const HeroSection = () => {
         transition={{ opacity: { delay: 1 }, y: { delay: 1, duration: 1.8, repeat: Infinity, ease: 'easeInOut' } }}
         onClick={handleScrollDown}
         aria-label="Scroll down to explore more"
-        className="group absolute bottom-20 left-[calc(50%-70px)] z-20 flex -translate-x-1/2 flex-col items-center gap-2 rounded-full border border-primary/20 bg-white/75 px-4 py-3 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-x-1/2 hover:scale-105 hover:border-primary/40 hover:bg-white md:bottom-10"
+        className="group absolute left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 rounded-full border border-primary/20 bg-white/75 px-4 py-3 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-x-1/2 hover:scale-105 hover:border-primary/40 hover:bg-white md:bottom-10 bottom-4"
       >
         <span className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground transition-colors duration-300 group-hover:text-primary">
           Scroll Down
