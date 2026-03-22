@@ -42,10 +42,15 @@ const AdminNotes = () => {
   const [progress, setProgress] = useState(0);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [selectedSubject, setSelectedSubject] = useState<SubjectFilter>('All');
+  const [search, setSearch] = useState('');
 
-  const visibleResources = selectedSubject === 'All'
+  let visibleResources = selectedSubject === 'All'
     ? resources
     : resources.filter(resource => resource.subject?.trim().toLowerCase() === selectedSubject.toLowerCase());
+  if (search.trim()) {
+    const s = search.trim().toLowerCase();
+    visibleResources = visibleResources.filter(r => (r.title || '').toLowerCase().includes(s));
+  }
 
   const subjectGroups = getSubjectGroups(visibleResources);
 
@@ -192,18 +197,27 @@ const AdminNotes = () => {
       </form>
 
       <h2 className="text-lg font-semibold mb-3">Uploaded Notes</h2>
-      <div className="mb-4 max-w-xs">
-        <Label>Filter by subject</Label>
-        <Select value={selectedSubject} onValueChange={(value) => setSelectedSubject(value as SubjectFilter)}>
-          <SelectTrigger className="mt-1">
-            <SelectValue placeholder="Select subject" />
-          </SelectTrigger>
-          <SelectContent>
-            {SUBJECT_FILTERS.map(subject => (
-              <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="mb-4 flex flex-col gap-2 max-w-xs">
+        <div>
+          <Label>Filter by subject</Label>
+          <Select value={selectedSubject} onValueChange={(value) => setSelectedSubject(value as SubjectFilter)}>
+            <SelectTrigger className="mt-1">
+              <SelectValue placeholder="Select subject" />
+            </SelectTrigger>
+            <SelectContent>
+              {SUBJECT_FILTERS.map(subject => (
+                <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <Input
+          type="text"
+          placeholder="Search notes by title..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="mt-1"
+        />
       </div>
 
       <div className="space-y-4">
