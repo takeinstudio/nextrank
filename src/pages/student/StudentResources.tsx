@@ -13,6 +13,7 @@ type Resource = Database['public']['Tables']['resources']['Row'];
 
 const StudentResources = () => {
   const [resources, setResources] = useState<Resource[]>([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -64,15 +65,26 @@ const StudentResources = () => {
   };
 
   const filterResources = (subject: SubjectFilter) => {
-    const filtered = subject === 'All'
+    let filtered = subject === 'All'
       ? resources
       : resources.filter(r => r.subject?.trim().toLowerCase() === subject.toLowerCase());
+    if (search.trim()) {
+      const s = search.trim().toLowerCase();
+      filtered = filtered.filter(r => (r.title || '').toLowerCase().includes(s));
+    }
     return sortByChapter(filtered);
   };
 
   return (
     <div className="p-4 md:p-8 max-w-4xl">
       <h1 className="text-2xl font-bold mb-6">Resources</h1>
+      <input
+        type="text"
+        placeholder="Search notes by title..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        className="mb-4 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary"
+      />
       <Tabs defaultValue="All">
         <TabsList className="mb-4 h-auto flex flex-wrap justify-start bg-muted rounded-xl">
           {SUBJECT_FILTERS.map(subject => (
