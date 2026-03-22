@@ -45,10 +45,30 @@ const StudentResources = () => {
     }
   };
 
-  const filterResources = (subject: SubjectFilter) =>
-    subject === 'All'
+
+  // Helper to extract chapter number from resource title
+  const getChapterNumber = (title: string): number => {
+    const match = title.match(/chapter\s*(\d+)/i);
+    return match ? parseInt(match[1], 10) : 9999; // fallback for non-chapter resources
+  };
+
+  // Sort resources by chapter number if present
+  const sortByChapter = (arr: Resource[]) => {
+    return [...arr].sort((a, b) => {
+      const aNum = getChapterNumber(a.title || '');
+      const bNum = getChapterNumber(b.title || '');
+      if (a.class !== b.class) return (a.class || 0) - (b.class || 0);
+      if (a.subject !== b.subject) return (a.subject || '').localeCompare(b.subject || '');
+      return aNum - bNum;
+    });
+  };
+
+  const filterResources = (subject: SubjectFilter) => {
+    const filtered = subject === 'All'
       ? resources
       : resources.filter(r => r.subject?.trim().toLowerCase() === subject.toLowerCase());
+    return sortByChapter(filtered);
+  };
 
   return (
     <div className="p-4 md:p-8 max-w-4xl">
