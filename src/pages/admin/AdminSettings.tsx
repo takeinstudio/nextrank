@@ -3,22 +3,48 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 const AdminSettings = () => {
   const [currentPw, setCurrentPw] = useState('');
   const [newPw, setNewPw] = useState('');
 
-  const handleChangePw = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleChangePw = async (e: React.FormEvent) => {
     e.preventDefault();
-    const stored = localStorage.getItem('nxtrank_admin_pw') || 'NextRankPruthiwiraj@07';
-    if (currentPw !== stored) {
-      toast.error('Current password is incorrect');
-      return;
+    setLoading(true);
+    
+    try {
+      const { data, error: fetchErr } = await supabase
+        .from('admin_settings')
+        .select('value')
+        .eq('key', 'admin_password')
+        .maybeSingle();
+      
+      const stored = data?.value || 'NextRankPruthiwiraj@07';
+      
+      if (currentPw !== stored) {
+        toast.error('Current password is incorrect');
+        setLoading(false);
+        return;
+      }
+      
+      const { error: upsertErr } = await supabase
+        .from('admin_settings')
+        .upsert({ key: 'admin_password', value: newPw }, { onConflict: 'key' });
+        
+      if (upsertErr) throw upsertErr;
+      
+      toast.success('Password updated in database!');
+      setCurrentPw('');
+      setNewPw('');
+    } catch (err: any) {
+      toast.error('Failed to update password: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-    localStorage.setItem('nxtrank_admin_pw', newPw);
-    toast.success('Password updated!');
-    setCurrentPw('');
-    setNewPw('');
   };
 
   return (

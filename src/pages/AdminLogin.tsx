@@ -4,19 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
 import logo from '@/assets/logo.jpeg';
-
-const ADMIN_PASSWORD = 'nxtrnk07';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    
+    try {
+      const { data } = await supabase
+        .from('admin_settings')
+        .select('value')
+        .eq('key', 'admin_password')
+        .maybeSingle();
+        
+      const ADMIN_PASSWORD = data?.value || 'NextRankPruthiwiraj@07';
+      
       if (password === ADMIN_PASSWORD) {
         localStorage.setItem('nxtrank_admin', 'true');
         toast.success('Welcome, Admin!');
@@ -24,8 +32,11 @@ const AdminLogin = () => {
       } else {
         toast.error('Invalid admin password');
       }
+    } catch (err) {
+      toast.error('Failed to verify password connected to Supabase');
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   return (
