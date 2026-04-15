@@ -40,9 +40,16 @@ const AdminQuestionBanks = () => {
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!file) { toast.error('Please select a PDF file'); return; }
 
-    if (!file) {
-      toast.error('Please select a PDF file');
+    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+    if (file.size > MAX_FILE_SIZE) {
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      toast.error('File is too large (' + sizeMB + 'MB)', {
+        description: 'Supabase limits free tier uploads to 50MB. Please compress it at ILovePDF.com and try again.',
+        action: { label: 'Compress PDF', onClick: () => window.open('https://ilovepdf.com/compress_pdf', '_blank') },
+        duration: 10000
+      });
       return;
     }
 
@@ -138,8 +145,8 @@ const AdminQuestionBanks = () => {
             <Select onValueChange={value => setForm(prev => ({ ...prev, studentClass: value }))} value={form.studentClass}>
               <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="11">Class 11</SelectItem>
-                <SelectItem value="12">Class 12</SelectItem>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((c) => (<SelectItem key={c} value={String(c)}>Class {c}</SelectItem>))}
+                
               </SelectContent>
             </Select>
           </div>

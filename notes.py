@@ -13,19 +13,31 @@ DEFAULT_CLASS = 11
 DEFAULT_SUBJECT = "Biology"
 
 
-def get_title_from_filename(filename):
-
+def get_title_from_filename(filename, subject=None, class_num=None):
     base_name = os.path.splitext(filename)[0].lower()
-
-    # Matches kebo101..kebo199 where the last two digits represent chapter number.
-    chapter_match = re.fullmatch(r"kebo1(\d{2})", base_name)
-    if chapter_match:
-        chapter_num = int(chapter_match.group(1))
+    # Chemistry: kech101, lech101, etc.
+    chem_match = re.fullmatch(r"[kl]ech(\d{3})", base_name)
+    if chem_match and subject and subject.lower() == "chemistry":
+        chapter_num = int(chem_match.group(1))
+        # 101-199: Chapter 1-99, 201-299: Chapter 101-199, etc.
+        return f"Class {class_num} Chemistry Chapter {chapter_num if chapter_num < 200 else chapter_num-100}"
+    # Biology: kebo101..kebo199
+    bio_match = re.fullmatch(r"kebo1(\d{2})", base_name)
+    if bio_match and subject and subject.lower() == "biology":
+        chapter_num = int(bio_match.group(1))
         return f"Class 11 Biology NCERT Chapter {chapter_num}"
-
-    if base_name == "kebo1ps":
+    if base_name == "kebo1ps" and subject and subject.lower() == "biology":
         return "Class 11 Biology NCERT Supplement"
-
+    # Mathematics: kemh101, lemh101, etc.
+    math_match = re.fullmatch(r"[kl]emh(\d{3})", base_name)
+    if math_match and subject and subject.lower() == "mathematics":
+        chapter_num = int(math_match.group(1))
+        return f"Class {class_num} Mathematics Chapter {chapter_num if chapter_num < 200 else chapter_num-100}"
+    # Physics: keph101, leph101, etc.
+    phys_match = re.fullmatch(r"[kl]eph(\d{3})", base_name)
+    if phys_match and subject and subject.lower() == "physics":
+        chapter_num = int(phys_match.group(1))
+        return f"Class {class_num} Physics Chapter {chapter_num if chapter_num < 200 else chapter_num-100}"
     return base_name.replace("_", " ").title()
 
 def upload_file(local_path, storage_path):
@@ -99,12 +111,8 @@ for class_folder in sorted(os.listdir(BASE_FOLDER)):
         print(f"Found {len(pdf_files)} PDF files in {subject_path}")
         for idx, file in enumerate(pdf_files, 1):
             local_path = os.path.join(subject_path, file)
-            # Auto-generate title: Class {class} {subject} Chapter {idx}
-            base_name = os.path.splitext(file)[0]
-            if re.search(r'chapter|ch', base_name, re.IGNORECASE):
-                title = f"Class {class_num} {subject_folder.title()} {base_name.title()}"
-            else:
-                title = f"Class {class_num} {subject_folder.title()} Chapter {idx}"
+            # Improved title generation for all subjects
+            title = get_title_from_filename(file, subject_folder.title(), class_num)
             storage_path = f"{class_folder}/{subject_folder}/{file}"
             print(f"\nUploading: {file} -> {storage_path}")
             public_url = upload_file(local_path, storage_path)

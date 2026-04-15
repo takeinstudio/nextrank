@@ -22,7 +22,7 @@ const FacultySection = () => (
           <span className="flex items-center gap-1"><Award size={14} /> CHSE Expert</span>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          "Helping CHSE Odisha students understand concepts deeply and succeed in board examinations."
+          "Helping CHSE Odisha students understand concepts deeply with 2yrs+ experience and succeed in board examinations."
         </p>
       </motion.div>
     </div>

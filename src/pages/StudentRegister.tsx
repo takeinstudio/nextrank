@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { hashPassword, setStudentSession } from '@/lib/auth';
@@ -77,8 +77,8 @@ const StudentRegister = () => {
             <Select onValueChange={v => setForm(p => ({ ...p, studentClass: v }))} required>
               <SelectTrigger className="mt-1"><SelectValue placeholder="Select class" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="11">Class 11</SelectItem>
-                <SelectItem value="12">Class 12</SelectItem>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((c) => (<SelectItem key={c} value={String(c)}>Class {c}</SelectItem>))}
+                
               </SelectContent>
             </Select>
           </div>
@@ -98,7 +98,7 @@ const StudentRegister = () => {
           </p>
         </form>
         <p className="text-center mt-4">
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back to Home</Link>
+          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">â† Back to Home</Link>
         </p>
       </div>
     </div>

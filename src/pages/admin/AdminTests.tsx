@@ -139,8 +139,8 @@ const AdminTests = () => {
             <Select onValueChange={v => setForm(p => ({ ...p, studentClass: v }))} value={form.studentClass}>
               <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="11">Class 11</SelectItem>
-                <SelectItem value="12">Class 12</SelectItem>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((c) => (<SelectItem key={c} value={String(c)}>Class {c}</SelectItem>))}
+                
               </SelectContent>
             </Select>
           </div>
