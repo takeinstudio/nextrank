@@ -8,6 +8,7 @@ export const SUBJECTS = [
   'Information Technology (Java)',
   'Odia',
   'English',
+  'Others',
 ] as const;
 
 export type Subject = (typeof SUBJECTS)[number];
@@ -31,4 +32,5 @@ export const SUBJECT_CARDS: SubjectCard[] = [
   { icon: Laptop, name: 'Information Technology (Java)', desc: 'Java programming, logic building and IT fundamentals', gradient: 'from-amber-400 to-orange-500' },
   { icon: Languages, name: 'Odia', desc: 'Grammar, comprehension and CHSE-oriented language practice', gradient: 'from-rose-400 to-pink-500' },
   { icon: BookOpen, name: 'English', desc: 'Grammar, writing skills, reading comprehension and literature', gradient: 'from-cyan-400 to-sky-500' },
+  { icon: BookOpen, name: 'Others', desc: 'Other subjects', gradient: 'from-gray-400 to-gray-500' },
 ];
