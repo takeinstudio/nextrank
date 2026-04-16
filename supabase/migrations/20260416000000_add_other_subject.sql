@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS public.subject_catalog (
+  name TEXT PRIMARY KEY,
+  display_order INTEGER NOT NULL UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
 INSERT INTO public.subject_catalog (name, display_order)
 VALUES
   ('Others', 8)
