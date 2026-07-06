@@ -23,9 +23,9 @@ const AdminLogin = () => {
         .eq('key', 'admin_password')
         .maybeSingle();
         
-      const ADMIN_PASSWORD = data?.value || 'NextRankPruthiwiraj@07';
+      const ADMIN_PASSWORD = data?.value;
       
-      if (password === ADMIN_PASSWORD) {
+      if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
         localStorage.setItem('nxtrank_admin', 'true');
         toast.success('Welcome, Admin!');
         navigate('/admin');

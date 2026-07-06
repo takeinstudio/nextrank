@@ -23,7 +23,13 @@ const AdminSettings = () => {
         .eq('key', 'admin_password')
         .maybeSingle();
       
-      const stored = data?.value || 'NextRankPruthiwiraj@07';
+      const stored = data?.value;
+      
+      if (!stored) {
+        toast.error('Admin password is not set in the database.');
+        setLoading(false);
+        return;
+      }
       
       if (currentPw !== stored) {
         toast.error('Current password is incorrect');
